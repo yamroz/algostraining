@@ -44,20 +44,21 @@ namespace AlgosTraining
             }
         }
 
-        private void AddElement(IComparable el, ref TreeNode tree)
+        private void AddElement(IComparable el, ref TreeNode tree, TreeNode parent = null)
         {
-            if (tree != null)
+            if (tree != null) //we need to search existing tree
             {
                 if (el.CompareTo(tree.value) == 0) return; //already present in tree, we don't insert duplicates
                 if (el.CompareTo(tree.value) < 0)
                 {
-                    AddElement(el, ref tree.left);
+                    AddElement(el, ref tree.left, tree);
                 }
-                else AddElement(el, ref tree.right);
+                else AddElement(el, ref tree.right, tree);
             }
-            else
+            else // we are in leaf or root, time to add
             {
                 tree = new TreeNode(el);
+                tree.parent = parent;
             }
         }
         
@@ -71,9 +72,6 @@ namespace AlgosTraining
 
         private TreeNode GetLargestElement(TreeNode tree,TreeNode parent = null)
         {
-            if (parent != null) tree.parent = parent;   //TODO remove after adding parent to AddElement operation
-            else tree.parent = null;                    //TODO remove after adding parent to AddElement operation
-
             if (tree.right == null)
             {
                 return tree;
@@ -88,9 +86,6 @@ namespace AlgosTraining
 
         private TreeNode GetSmallestElement(TreeNode tree, TreeNode parent = null)
         {
-            if (parent != null) tree.parent = parent;   //TODO remove after adding parent to AddElement operation
-            else tree.parent = null;                    //TODO remove after adding parent to AddElement operation
-
             if (tree.left == null) return tree;
             else return GetSmallestElement(tree.left, tree);
         }
@@ -159,7 +154,7 @@ namespace AlgosTraining
                         ExchangeForSourceRemoval(toSubstitute, toRemove);
                     }
                 }
-
+                --size;
             }
             //lets search further
             else

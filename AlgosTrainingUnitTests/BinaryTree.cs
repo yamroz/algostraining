@@ -71,7 +71,16 @@ namespace AlgosTrainingUnitTests
         }
 
         [TestMethod]
-        public void RemoveElementFromProperTree()
+        public void RemoveProperElementFromOneElementTree()
+        {
+            BinaryTree bt = new BinaryTree();
+            bt.AddElement(100);
+            bt.RemoveElement(100);
+            Assert.AreEqual(0,bt.GetElements().Length);
+        }
+
+        [TestMethod]
+        public void RemoveOneElementFromProperTree()
         {
             int[] expected = { 1, 2, 4, 5, 7, 9 };
             BinaryTree bt = new BinaryTree();
