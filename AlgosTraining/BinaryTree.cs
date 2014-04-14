@@ -100,7 +100,7 @@ namespace AlgosTraining
          */
         private void ExchangeForSourceRemoval(TreeNode source, TreeNode target)
         {
-            target.value = source.value;
+            //target.value = source.value;
             if (source.parent.left == source) //source is left child
             {
                 source.parent.left = target;

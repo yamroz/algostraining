@@ -80,6 +80,30 @@ namespace AlgosTrainingUnitTests
         }
 
         [TestMethod]
+        public void RemoveRootFromTree()
+        {
+            int[] data = { 100,50,150,25,125,175,12,37,112,187 };
+            int[] expected = { 12, 25, 37, 50, 112, 125, 150, 175, 187 };
+            BinaryTree bt = new BinaryTree();
+            bt.AddElements(data);
+            bt.RemoveElement(100);
+            IComparable[] result = bt.GetElements();
+            for (int i = 0; i < expected.Length; i++) Assert.AreEqual<IComparable>(expected[i], result[i], "The result and expected are different at index:" + i);
+        }
+
+        [TestMethod]
+        public void RemoveRightLeaf()
+        {
+            int[] data = { 100, 50, 150, 25, 125, 175, 12, 37, 112, 187 };
+            int[] expected = { 12, 25, 37, 50, 100, 112, 125, 150, 175, 187 };
+            BinaryTree bt = new BinaryTree();
+            bt.AddElements(data);
+            bt.RemoveElement(100);
+            IComparable[] result = bt.GetElements();
+            for (int i = 0; i < expected.Length; i++) Assert.AreEqual<IComparable>(expected[i], result[i], "The result and expected are different at index:" + i);
+        }
+
+        [TestMethod]
         public void RemoveOneElementFromProperTree()
         {
             int[] expected = { 1, 2, 4, 5, 7, 9 };
