@@ -32,6 +32,7 @@ namespace AlgosTraining
 
         public void AddElement(IComparable el)
         {
+            if (el == null) return;
             AddElement(el,ref root);
             size++;
         }
@@ -114,15 +115,20 @@ namespace AlgosTraining
             target.parent = source.parent;
         }
 
-        private void RemoveElement(TreeNode parent, TreeNode tree, IComparable el, bool weAreLeft)
+        public void RemoveElement(IComparable el)
+        {
+            RemoveElement(null, root, el);
+        }
+
+        private void RemoveElement(TreeNode parent, TreeNode tree, IComparable el)
         {
             //There is nothing to remove
-            if (tree == null) return;
+            if (tree == null || el == null) return;
 
             //Element found:
             if (tree.value.CompareTo(el) == 0)
             {
-                //1. No descendants just remove.
+                //A. No descendants just remove.
                 if (tree.left == null && tree.right == null)
                 {
                     //We are in root
@@ -130,28 +136,38 @@ namespace AlgosTraining
                     {
                         this.root = null; //deleting root
                     }
-                    else // we are in regular node
+                    else // we are in regular node, remove us from parent
                     {
-                        if (weAreLeft) parent.left = null;
+                        if (parent.left==tree) parent.left = null;
                         else parent.right = null;
                     }
                 }
-                else //2. there are descendants, we need to repair tree.
+                else //B. there are descendants, we need to repair tree.
                 {
-                    TreeNode toRemove = tree;
-                    //lets choose candidate for substitute:
-                    if(tree.left != null)
-                    {
-                        TreeNode toSubstitute = GetLargestElement(tree.left);
-                        toSubstitute.parent.right = toSubstitute.left; //we are largest so parent right = our left
-                        ExchangeForSourceRemoval(toSubstitute, toRemove);
+                    //choose candidate for replacemnt
+                    TreeNode replacement = null;
+                    if(tree.left != null)replacement = GetLargestElement(tree.left);
+                    else replacement= GetLargestElement(tree.right);
 
-                    }
-                    else 
+                    tree.value = replacement.value;
+                    //repairing tree
+                    if (replacement.left == null && replacement.right == null) //replacement has no descendants
                     {
-                        TreeNode toSubstitute = GetSmallestElement(tree.right);
-                        toSubstitute.parent.left = toSubstitute.right; //we are smallest so parent left= our right
-                        ExchangeForSourceRemoval(toSubstitute, toRemove);
+                        if (replacement == replacement.parent.left) replacement.parent.left = null;
+                        else replacement.parent.right = null;
+                    }
+                    else //replacement has descendants
+                    {
+                        if (replacement == replacement.parent.left)
+                        {
+                            replacement.parent.left = replacement.left;
+                            replacement.left.parent = replacement.parent;
+                        }
+                        else
+                        {
+                            replacement.parent.right = replacement.right;
+                            replacement.right.parent = replacement.parent;
+                        }
                     }
                 }
                 --size;
@@ -160,11 +176,11 @@ namespace AlgosTraining
             else
             {
                 //RemoveElement(tree, (el.CompareTo(tree.value)<0) ? tree.left : tree.right,el, true); //TODO try in the future
-                if (el.CompareTo(tree.value) < 0) RemoveElement(tree, tree.left, el, true); //we traverse left subtree
-                else RemoveElement(tree, tree.right, el, false);//we traverse right subtree
+                if (el.CompareTo(tree.value) < 0) RemoveElement(tree, tree.left, el); //we traverse left subtree
+                else RemoveElement(tree, tree.right, el);//we traverse right subtree
             }
         }
-
+        
         public IComparable[] GetElements()
         {
             IComparable[] result=new IComparable[size];
@@ -173,9 +189,6 @@ namespace AlgosTraining
             return result;
         }
 
-        public void RemoveElement(IComparable el)
-        {
-            RemoveElement(null, root, el, true);
-        }
+
     }
 }
