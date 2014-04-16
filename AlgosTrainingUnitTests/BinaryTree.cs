@@ -33,6 +33,17 @@ namespace AlgosTrainingUnitTests
         }
 
         [TestMethod, TestCategory("Adding")]
+        public void AddElementsSimpleTree()
+        {
+            int[] elementsToAdd = { 50,10,60 };
+            BinaryTree bt = new BinaryTree();
+            bt.AddElements(elementsToAdd);
+            int[] expected = { 10,50,60 };
+            IComparable[] result = bt.GetElements();
+            for (int i = 0; i < expected.Length; i++) Assert.AreEqual<IComparable>(expected[i], result[i], "The result and expected are different at index:" + i);
+        }
+
+        [TestMethod, TestCategory("Adding")]
         public void AddElementMultipleCall()
         {
             int[] expected = { 1, 2, 3, 4, 5, 7, 9 };
@@ -143,6 +154,19 @@ namespace AlgosTrainingUnitTests
             for (int i = 0; i < expected.Length; i++) Assert.AreEqual<IComparable>(expected[i], result[i], "The result and expected are different at index:" + i);
         }
 
+
+        [TestMethod, TestCategory("Removal")]
+        public void RemoveElementLeftReplacementCase()
+        {
+            int[] data = { 100, 50, 150, 25, 125, 175, 12, 37, 112, 187, 75, 70 };
+            int[] expected = { 12, 25, 37, 50, 70, 75, 112, 125, 150, 175, 187 };
+            BinaryTree bt = new BinaryTree();
+            bt.AddElements(data);
+            bt.RemoveElement(100);
+            IComparable[] result = bt.GetElements();
+            for (int i = 0; i < expected.Length; i++) Assert.AreEqual<IComparable>(expected[i], result[i], "The result and expected are different at index:" + i);
+        }
+
         [TestMethod,TestCategory("Access")]
         public void GetSmallestElement()
         {
@@ -181,5 +205,38 @@ namespace AlgosTrainingUnitTests
             BinaryTree bt = new BinaryTree();
             bt.RemoveElement(5);
         }
+
+        [TestMethod,TestCategory("Usage")]
+        public void AddAndRemoveRepeatably()
+        {
+            int[] data = { 100, 50, 150, 25, 125, 175, 12, 37, 112, 187 };
+            int[] toRemove = { 187, 112, 37, 12, 175, 125, 25, 150, 50, 100 };
+            BinaryTree bt = new BinaryTree();
+            bt.AddElements(data);
+            foreach (int x in toRemove)
+            {
+                   bt.RemoveElement(x);
+            }
+            
+
+        }
     }
+
+    [TestClass]
+    public class BinaryTreeLoadTests
+    {
+        [TestMethod,TestCategory("Load")]
+        public void BinaryTreeLoadTest()
+        {
+            BinaryTree bt = new BinaryTree();
+            Random r = new Random();
+            for(int i=0;i<10000000;i++)
+            {
+                bt.AddElement(r.Next(1000000));
+                bt.RemoveElement(r.Next(1000000));
+            }
+
+        }
+    }
+
 }

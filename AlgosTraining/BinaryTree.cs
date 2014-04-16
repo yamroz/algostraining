@@ -160,14 +160,30 @@ namespace AlgosTraining
                     {
                         if (replacement == replacement.parent.left)
                         {
-                            replacement.parent.left = replacement.left;
-                            replacement.left.parent = replacement.parent;
+                            if(replacement.right!=null)                                                     //case 1  o
+                            {                                                                               //       /
+                                replacement.parent.left = replacement.right;                                //      r
+                                replacement.right.parent = replacement.parent;                              //       \  
+                            }                                                                               //        o
+                            else                                                                            //case 2  o
+	                        {                                                                               //       /
+                                replacement.parent.left= replacement.left;                                  //      r
+                                replacement.left.parent = replacement.parent;                               //     /
+                            }                                                                               //    o
                         }
                         else
                         {
-                            replacement.parent.right = replacement.right;
-                            replacement.right.parent = replacement.parent;
-                        }
+                            if (replacement.right == null)                                                  //case 3  o
+                            {                                                                               //         \
+                                replacement.parent.right = replacement.left;                                //          r
+                                replacement.left.parent = replacement.parent;                               //         /
+                            }                                                                               //        o
+                            else
+                            {                                                                               //case 4  o
+                                replacement.parent.right = replacement.right;                               //         \
+                                replacement.right.parent = replacement.parent;                              //          r
+                            }                                                                               //           \
+                        }                                                                                   //            o
                     }
                 }
                 --size;
